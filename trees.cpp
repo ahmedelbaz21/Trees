@@ -90,6 +90,37 @@ public:
     }
 
     // Function to delete a node
+    Node* deleteNode(Node* node, int value) {
+        if (node == nullptr) {
+            return node;
+        }
+        if (value < node->data) {
+            node->left = deleteNode(node->left, value);
+        } else if (value > node->data) {
+            node->right = deleteNode(node->right, value);
+        } else {
+            // Node with only one child or no child
+            if (node->left == nullptr) {
+                Node* temp = node->right;
+                delete node;
+                return temp;
+            } else if (node->right == nullptr) {
+                Node* temp = node->left;
+                delete node;
+                return temp;
+            }
+
+            // Node with two children: Get the inorder successor (smallest in the right subtree)
+            Node* temp = findMin(node->right);
+
+            // Copy the inorder successor's content to this node
+            node->data = temp->data;
+
+            // Delete the inorder successor
+            node->right = deleteNode(node->right, temp->data);
+        }
+        return node;
+    }
     
 };
 
